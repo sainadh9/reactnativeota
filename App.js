@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -25,6 +25,69 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+const onCheckGitVersion = () => {
+  hotUpdate.git.checkForGitUpdate({
+    branch: Platform.OS === 'ios' ? 'iOS' : 'android',
+    bundlePath:
+      Platform.OS === 'ios'
+        ? 'output/main.jsbundle'
+        : 'output/index.android.bundle',
+    url: 'https://github.com/sainadh9/reactnativeota.git',
+    onCloneFailed(msg) {
+      Alert.alert('Clone project failed!', msg, [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ]);
+    },
+    onCloneSuccess() {
+      Alert.alert('Clone project success!', 'Restart to apply the changes', [
+        {
+          text: 'OK',
+          onPress: () => hotUpdate.resetApp(),
+        },
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ]);
+    },
+    onPullFailed(msg) {
+      Alert.alert('Pull project failed!', msg, [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ]);
+    },
+    onPullSuccess() {
+      Alert.alert('Pull project success!', 'Restart to apply the changes', [
+        {
+          text: 'OK',
+          onPress: () => hotUpdate.resetApp(),
+        },
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ]);
+    },
+    onProgress(received, total) {
+      const percent = (+received / +total) * 100;
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setProgress(percent);
+    },
+    onFinishProgress() {
+      setLoading(false);
+    },
+  });
+};
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -58,6 +121,11 @@ const App: () => Node = () => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  // Run on component mount
+  useEffect(() => {
+    onCheckGitVersion();
+  }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
