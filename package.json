@@ -8,13 +8,16 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "export-android": "react-native bundle --platform android --dev $false --entry-file index.js --bundle-output android/output/index.android.bundle --assets-dest android/output"
+    "export-android": "react-native bundle --platform android --dev $false --entry-file index.js --bundle-output android/output/index.android.bundle --assets-dest android/output",
+    "export-release":"react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/ && cd android && gradlew clean && gradlew assembleDebug && cd.."
+    
 
   },
   "dependencies": {
     "react": "17.0.2",
     "react-native": "0.66.2",
     "react-native-blob-util": "0.19.11",
+    "react-native-fs": "^2.20.0",
     "react-native-ota-hot-update": "^2.1.4"
   },
   "devDependencies": {

@@ -7,7 +7,6 @@
  */
 
 import React, { useEffect } from 'react';
-import type {Node} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,7 +15,8 @@ import {
   Text,
   useColorScheme,
   View,
-} from 'react-native';
+  Platform,
+  Alert} from 'react-native';
 
 import {
   Colors,
@@ -25,15 +25,49 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import hotUpdate from 'react-native-ota-hot-update';
+
+
+
+
+
+
+const Section = ({children, title}) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  return (
+    <View style={styles.sectionContainer}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: isDarkMode ? Colors.white : Colors.black,
+          },
+        ]}>
+        {title}
+      </Text>
+      <Text
+        style={[
+          styles.sectionDescription,
+          {
+            color: isDarkMode ? Colors.light : Colors.dark,
+          },
+        ]}>
+        {children}
+      </Text>
+    </View>
+  );
+};
+
 
 const onCheckGitVersion = () => {
+
   hotUpdate.git.checkForGitUpdate({
     branch: Platform.OS === 'ios' ? 'iOS' : 'android',
     bundlePath:
       Platform.OS === 'ios'
         ? 'output/main.jsbundle'
         : 'output/index.android.bundle',
-    url: 'https://github.com/sainadh9/reactnativeota.git',
+    url: 'https://github.com/<your-username>/OTA-bundle.git',
     onCloneFailed(msg) {
       Alert.alert('Clone project failed!', msg, [
         {
@@ -84,48 +118,22 @@ const onCheckGitVersion = () => {
       setProgress(percent);
     },
     onFinishProgress() {
-      setLoading(false);
+      // setLoading(false);
     },
   });
 };
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  // Run on component mount
+  // // Run on component mount
   useEffect(() => {
-    onCheckGitVersion();
-  }, []);
+  console.log('HotUpdate Object:',onCheckGitVersion());
+    }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -138,7 +146,7 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
+          <Section title="Step Four">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
           </Section>

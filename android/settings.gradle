@@ -1,3 +1,5 @@
 rootProject.name = 'gitota'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':react-native-ota-hot-update'
+project(':react-native-ota-hot-update').projectDir = new File(rootProject.projectDir,'../node_modules/react-native-ota-hot-update/android')
 include ':app'
