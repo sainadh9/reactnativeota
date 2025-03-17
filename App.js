@@ -67,7 +67,7 @@ const onCheckGitVersion = () => {
       Platform.OS === 'ios'
         ? 'output/main.jsbundle'
         : 'output/index.android.bundle',
-    url: 'https://github.com/<your-username>/OTA-bundle.git',
+    url: 'https://github.com/sainadh9/reactnativeota.git',
     onCloneFailed(msg) {
       Alert.alert('Clone project failed!', msg, [
         {
